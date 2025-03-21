@@ -1,0 +1,114 @@
+In old languages like C++, programmer is responsible for both creation and destruction of objects.Usually programmer taking very much care while creating object, but neglecting destruction of useless objects. Because of his neglectance, total memory can be filled with useless objects which creates memory problems and total application will be down with Out of memory error.
+
+But in Python, We have some assistant which is always running in the background to destroy useless objects.Because this assistant the chance of failing Python program with memory problems is very less. This assistant is nothing but Garbage Collector.
+
+Hence the main objective of Garbage Collector is to destroy useless objects.
+
+If an object does not have any reference variable then that object eligible for Garbage Collection.
+
+How to enable and disable Garbage Collector in our program:
+======================================================
+
+By default Gargbage collector is enabled, but we can disable based on our requirement. In this context we can use the following functions of gc module.
+
+1.	gc.isenabled()
+Returns True if GC enabled
+
+2.	gc.disable() To disable GC explicitly
+
+3.	gc.enable() To enable GC explicitly Example:
+1)	import gc
+2)	class Test:
+3)	print(gc.isenabled())
+4)	gc.disable()
+5)	print(gc.isenabled())
+6)	gc.enable()
+7)	print(gc.isenabled())
+Destructors:
+============
+Destructor is a special method and the name should be  del 	Just before destroying an object Garbage Collector always calls destructor to perform clean up activities (Resource deallocation activities like close database connection etc).
+Once destructor execution completed then Garbage Collector automatically destroys that object.
+
+Note: The job of destructor is not to destroy object and it is just to perform clean up activities.
+
+Example:
+
+1)	import time
+2)	class Test:
+3)	def init (self):
+4)	print("Object Initialization	")
+5)	def del (self):
+6)	print("Fullfilling last wish and performing clean up activities	")
+7)	t1=Test()
+8)	t1=None
+9)	time.sleep(10)
+10)	print("End of application")
+
+o/p:D:\pythonclasses>py test.py Object Initialization.....
+Fullfilling last wish and performing clean up activities....
+End of application
+
+Note: If the object does not contain any reference variable then only it is eligible fo GC. ie if the reference count is zero then only object eligible for GC
+
+Example:
+------------
+
+1)	import time
+2)	class Test:
+3)	def init (self):
+4)	print("Object Initialization	")
+5)	def del (self):
+6)	print("Fullfilling last wish and performing clean up activities	")
+7)	t1=Test() 8) t2=t1
+9) t3=t2
+10)	del t1
+11)	time.sleep(10)
+12)	print("object not yest destroyed after deleting t1")
+13)	del t2
+14)	print("object not yest destroyed after deleting t2")
+15)	del t3
+16)	print("By this time object will be destroyed")
+17)	print("End of application")
+
+o/p:D:\pythonclasses>py test.py Object Initialization.....
+object not yest destroyed after deleting t1 object not yest destroyed after deleting t2
+Fullfilling last wish and performing clean up activities....
+By this time object will be destroyed End of application
+
+Example:
+=========
+
+1)	import time
+2)	class Test:
+3)	def init (self):
+4)	print("Constructor Execution	")
+5)	def del (self):
+6)	print("Destructor Execution	")
+7)
+8)	list=[Test(),Test(),Test()]
+9)	del list
+10)	time.sleep(5)
+11)	print("End of application")
+
+o/p:D:\pythonclasses>py test.py Constructor Execution.........
+Constructor  Execution.........
+Constructor  Execution.........
+Destructor  Execution......
+Destructor  Execution......
+Destructor  Execution......
+End of application
+
+How to find the number of references of an object:
+=============================================
+
+sys module contains getrefcount() function for this purpose. sys.getrefcount(objectreference)
+Example:
+1)	import sys
+2)	class Test:
+3)	pass
+4)	t1=Test() 5) t2=t1
+6) t3=t1
+7) t4=t1
+8) print(sys.getrefcount(t1)) Output 5
+Note: For every object, Python internally maintains one default reference variable self.
+

@@ -1,0 +1,711 @@
+Agenda:
+ 
+
+-->Inheritance
+-->Has-A Relationship
+-->IS-A Relationship
+-->IS-A vs HAS-A Relationship
+-->Composition vs Aggregation
+
+-->Types of Inheritance
+-->Single Inheritance
+-->Multi Level Inheritance
+-->Hierarchical Inheritance
+-->Multiple Inheritance
+-->Hybrid Inheritance
+-->Cyclic Inheritance
+
+-->Method Resolution Order (MRO)
+-->super() Method
+ 
+
+Using members of one class inside another class:
+---------------------------------------------------------------------
+We can use members of one class inside another class by using the following ways
+
+1.	By Composition (Has-A Relationship)
+2.	By Inheritance (IS-A Relationship)
+
+1.	By Composition (Has-A Relationship):
+--------------------------------------------------------
+-->By using Class Name or by creating object we can access members of one class inside another class is nothing but composition (Has-A Relationship).
+
+-->The main advantage of Has-A Relationship is Code Reusability.
+
+1)	class Engine:
+2)	a=10
+3)	def init (self):
+4)	self.b=20
+5)	def m1(self):
+6)	print("Engine Specific Functionality")
+7)	class Car:
+8)	def init (self):
+9)	self.engine=Engine()
+10)	def m2(self):
+11)	print("Car using Engine class functionality")
+12)	print(self.engine.a)
+13)	print(self.engine.b)
+14)	self.engine.m1()
+15)	c=Car() 16) c.m2()
+
+o/p:D:\pythonclasses>py test.py Car using Engine class functionality 10
+20
+Engine Specific Functionality
+
+Demo Program-2:
+-------------------------
+
+1)	class Car:
+2)	def init (self,name,model,color):
+3)	self.name=name
+4)	self.model=model
+5)	self.color=color
+6)	def getinfo(self):
+7)		print("Car Name:{}, Model:{},color:{}".format(self.name,self.model,self.color))
+8)
+9)	class Employee:
+10)	def init (self,ename,eno,car):
+11)	self.ename=ename
+12)	self.eno=eno
+13)	self.car=car
+14)	def empinfo(self):
+15)	print("Employee Name:",self.ename)
+16)	print("Employee Number:",self.eno)
+17)	print("Employee Car Info:")
+18)	self.car.getinfo() 19)
+20)	c=Car("Innova","2.5v","Grey")
+21)	e=Employee("Mahesh",101,c)
+22)	e.empinfo()
+
+o/p:D:\pythonclasses>py test.py Employee Name: Mahesh Employee Number: 101 Employee Car Info:
+Car Name:Innova, Model:2.5v, color:Grey
+
+-->In the above example Employee Has-A car reference and hence Employee class can access all memebers of Car class.
+
+Demo Program-3:
+
+1) class X:
+2)	a=10
+3)	def init (self):
+4)	self.b=20
+5)	def m1(self):
+6)	print("m1 method of X class") 7)
+8) class Y:
+9)	c=30
+10)	def init (self):
+11)	self.d=40
+12)	def m2(self):
+13)	print("m2 method of Y class")
+14)	def m3(self):
+15)	x=X()
+16)	print(x.a)
+17)	print(x.b)
+18)	x.m1()
+19)	print(Y.c)
+20)	print(self.d)
+21)	self.m2()
+22)	print("m3 method in Y class") 23) y1=Y()
+24) y1.m3()
+
+o/p:D:\pythonclasses>py test.py 10
+20
+m1 method of X class 30
+40
+m2 method of Y class m3 method in Y class
+
+2.	By Inheritance(IS-A Relationship):
+----------------------------------------------------
+-->What ever variables, methods and constructors available in the parent class by default available to the child classes and we are not required to rewrite.
+
+-->Hence the main advantage of inheritance is Code Reusability and we can extend existing functionality with some more extra functionality.
+
+Syntax : class childclass(parentclass):
+
+Demo Program:
+----------------------
+
+1)	class P:
+2)	a=10
+3)	def init (self):
+4)	self.b=20
+5)	def m1(self):
+6)	print("Parent Instance method")
+7)	@classmethod
+8)	def m2(cls):
+9)	print("Parent class method")
+10)	@staticmethod
+11)	def m3():
+12)	print("Parent5 static method")
+13)	class C(P):
+14)	pass 15)
+16) c=C()
+17)	print(c.a)
+18)	print(c.b) 19) c.m1() 20) c.m2() 21) c.m3()
+o/p:D:\pythonclasses>py test.py 10
+20
+Parent Instance method Parent class method Parent5 static method
+
+Ex:
+----	
+	1)	class P:
+	2)	10 methods
+	3)	class C(P):
+	4)	5 methods
+
+-->In the above example Parent class contains 10 methods and these methods automatically available to the child class and we are not required to rewrite those methods(Code Reusability) Hence child class contains 15 methods.
+
+Note:
+What ever members present in Parent class are by default available to the child
+class through inheritance.
+
+Demo Program:
+---------------------
+
+1)	class P:
+2)	def m1(self):
+3)	print("Parent class method")
+4)	class C(P):
+5)	def m2(self):
+6)	print("Child class method") 
+7) c=C()
+8) c.m1()
+9) c.m2()
+
+o/p:D:\pythonclasses>py test.py Parent class method
+Child class method
+
+-->What ever methods present in Parent class are automatically available to the child class and hence on the child class reference we can call both parent class methods and child class methods.
+
+-->Similarly variables also
+
+1) class P:
+2)	a=10
+3)	def init (self):
+4)	self.b=20
+5)	class C(P):
+6)	c=30
+7)	def init (self):
+8)	super(). init ()===>Line-1
+9)	self.d=30
+10) c1=C() 1
+11) print(c1.a,c1.b,c1.c,c1.d)
+
+o/p:
+10 20 30 40
+-->If we comment Line-1 then variable b is not available to the child class. Demo Program:
+----------------------
+
+1)	class Person:
+2)	def init (self,name,age):
+3)	self.name=name
+4)	self.age=age
+5)	def eat_n_drink(self):
+6)	print("Drink Beer and Eat Biryani") 7)
+8)	class Employee(Person):
+9)	def init (self,name,age,eno,sal):
+10)	super(). init (name,age)
+11)	self.eno=eno
+12)	self.sal=sal
+13)	def work(self):
+14)	print("Coding Python is vsery easy just like drinking chilled beer")
+15)	def emp_info(self):
+16)	print("Employee Name:",self.name)
+17)	print("Employee Age:",self.age)
+18)	print("Employee Number:",self.eno)
+19)	print("Employee Salary:",self.sal) 20)
+21) e=Employee("Mahesh",50,100,100000)
+22)	e.eat_n_drink()
+
+23)	e.work()
+24)	e.emp_info()
+
+o/p:D:\pythonclasses>py test.py Drink Beer and Eat Biryani
+Coding Python is vsery easy just like drinking chilled beer Employee Name: Mahesh
+Employee Age: 50
+Employee Number: 100
+Employee Salary: 100000
+
+IS-A vs HAS-A Relationship:
+---------------------------------------
+-->If we want to extend existing functionality with some more extra functionality then we should go for IS-A Relationship.
+
+-->If we dont want to extend and just we have to use existing functionality then we should go for HAS-A Relationship.
+
+Eg:	Employee class extends Person class Functionality
+But Employee class just uses Car functionality but not extending
+
+Person
+  | IS - A
+  |
+  |	  HAS - A
+Employee----------->Car
+
+1)	class Car:
+2)	def init (self,name,model,color):
+3)	self.name=name
+4)	self.model=model
+5)	self.color=color
+6)	def get_info(self):
+7)	print("\tCar
+name:{}\n\tModel:{}\n\tColor={}".format(self.name,self.model,self.color))
+9)	class Person:
+10)	def init (self,name,age):
+11)	self.name=name
+12)	self.age=age
+13)	def eat_n_drink(self):
+14)	print("Drink Beer and Eat Biryani") 15)
+16)	class Employee(Person):
+17)	def init (self,name,age,eno,sal,car):
+18)	super(). init (name,age)
+19)	self.eno=eno
+20)	self.sal=sal
+21)	self.car=car
+22)	def work(self):
+23)	print("Coding Python is vsery easy just like drinking chilled beer")
+24)	def emp_info(self):
+25)	print("Employee Name:",self.name)
+26)	print("Employee Age:",self.age)
+27)	print("Employee Number:",self.eno)
+28)	print("Employee Salary:",self.sal)
+29)	print("Employee Car Info:")
+30)	self.car.get_info() 31)
+32) c=Car("Innova","2.5v","Grey")
+33) e=Employee("Mahesh",50,100,100000,c)
+34)	e.eat_n_drink()
+35)	e.work()
+36)	e.emp_info()
+
+o/p:D:\pythonclasses>py test.py Drink Beer and Eat Biryani
+Coding Python is vsery easy just like drinking chilled beer Employee Name: Mahesh
+Employee Age: 50
+Employee Number: 100
+Employee Salary: 100000 Employee Car Info:
+Car name:Innova Model:2.5v Color=Grey
+
+-->In the above example Employee class extends Person class functionality but just uses Car class functionality.
+
+Composition vs Aggregation:
+==========================
+
+Composition:
+-------------------
+-->Without existing container object if there is no chance of existing contained object then the container and contained objects are strongly associated and that strong association is nothing but Composition.
+Ex: University contains several Departments and without existing university object there is no chance of existing Department object. Hence University and Department objects are strongly associated and this strong association is nothing but Composition.
+
+Aggregation:
+------------------
+ 
+
+University Object (Container Object)
+ 
+-->Without existing container object if there is a chance of existing contained object then the container and contained objects are weakly associated and that weak association is nothing but Aggregation.
+-->Ex: Department contains several Professors. Without existing Department still there may be a chance of existing Professor. Hence Department and Professor objects are weakly associated, which is nothing but Aggregation.
+
+1)	class Student:
+2)	collegeName='IKYA GLOBAL'
+3)	def init (self,name):
+4)	self.name=name
+5)	print(Student.collegeName)
+6)	s=Student('Ikya')
+7)	print(s.name)
+
+Output:
+IKYA GLOBAL
+Ikya
+
+-->In the above example without existing Student object there is no chance of existing his name. Hence Student Object and his name are strongly associated which is nothing but Composition.
+
+-->But without existing Student object there may be a chance of existing collegeName. Hence Student object and collegeName are weakly associated which is nothing but Aggregation.
+
+Conclusion:
+The relation between object and its instance variables is always Composition where as the relation between object and static variables is Aggregation.
+
+Note:
+Whenever we are creating child class object then child class constructor will be
+executed. If the child class does not contain constructor then parent class constructor will be executed, but parent object won't be created.
+
+Ex:
+----	
+	1)	class P:
+	2)	def init (self):
+	3)	print(id(self))
+	4)	
+	5)	class C(P):
+	6)	pass
+	7)	c=C()
+	8)	print(id(c))
+1)	class Person:
+2)	def init (self,name,age):
+3)	self.name=name
+4)	self.age=age
+5)	class Student(Person):
+6)	def  init (self,name,age,rollno,marks):
+7)	super().  init (name,age)
+8)	self.rollno=rollno
+9)	self.marks=marks
+10)	def str (self):
+11)	return 'Name={}\nAge={}\nRollno={}\nMarks={}'.format(self.name,self.age,self.rollno,s elf.marks)
+12) s1=Student('Mahesh',48,101,90)
+13) print(s1)
+
+Note: In the above example when ever we are creating child class object both parent and child class constructors got executed to perform initialization of child object
+
+
+Types of Inheritances:
+====================
+
+1).Single Inheritance:
+-------------------------------
+The concept of inheriting the properties from one class to another class is known as single inheritance.
+
+1)	class P:
+2)	def m1(self):
+3)	print("Parent Method")
+4)	class C(P):
+5)	def m2(self):
+6)	print("Child Method") 7) c=C()
+8) c.m1()
+9) c.m2()
+
+o/p:D:\pythonclasses>py test.py Parent Method
+Child Method
+
+
+2).Multi Level Inheritance:
+--------------------------------------
+The concept of inheriting the properties from multiple classes to single class with the concept of one after another is known as multilevel inheritance.
+
+1)	class P:
+2)	def m1(self):
+3)	print("Parent Method")
+4)	class C(P):
+5)	def m2(self):
+6)	print("Child Method")
+7)	class CC(C):
+8)	def m3(self):
+9)	print("Sub Child Method")
+10)	c=CC() 11) c.m1() 12) c.m2() 13) c.m3()
+
+3).Hierarchical Inheritance:
+---------------------------------------
+The concept of inheriting properties from one class into multiple classes which are present at same level is known as Hierarchical Inheritance
+
+
+1)	class P:
+2)	def m1(self):
+3)	print("Parent Method")
+4)	class C1(P):
+5)	def m2(self):
+6)	print("Child1 Method")
+7)	class C2(P):
+8)	def m3(self):
+9)	print("Child2 Method") 10) c1=C1()
+11) c1.m1()
+12) c1.m2()
+13) c2=C2()
+14) c2.m1()
+15) c2.m3()
+4).Multiple Inheritance:
+---------------------------------
+The concept of inheriting the properties from multiple classes into a single class at a time, is known as multiple inheritance.
+
+1)	class P1:
+2)	def m1(self):
+3)	print("Parent1 Method")
+4)	class P2:
+5)	def m2(self):
+6)	print("Parent2 Method")
+7)	class C(P1,P2):
+8)	def m3(self):
+9)	print("Child Method")
+10) c=C() 11) c.m1() 12) c.m2() 13) c.m3()
+
+o/p:D:\pythonclasses>py test.py Parent1 Method
+Parent2 Method Child Method
+
+-->If the same method is inherited from both parent classes,then Python will always consider the order of Parent classes in the declaration of the child class.
+
+class C(P1,P2): ===>P1 method will be considered class C(P2,P1): ===>P2 method will be considered
+
+1)	class P1:
+2)	def m(self):
+3)	print("Parent1 Method")
+4)	class P2:
+5)	def m(self):
+6)	print("Parent2 Method")
+7)	class C(P2,P1):
+8)	def m1(self):
+9)	print("Child Method")
+10) c=C()
+11) c.m() 12) c.m1()
+
+o/p:
+Parent2 Method Child Method
+
+5).Hybrid Inheritance:
+--------------------------------
+Combination of Single, Multi level, multiple and Hierarchical inheritance is known as Hybrid Inheritance.
+
+6).Cyclic Inheritance:
+-------------------------------
+The concept of inheriting properties from one class to another class in cyclic way, is called Cyclic inheritance.Python won't support for Cyclic Inheritance of course it is really not required.
+
+Ex-1:
+--------
+class A(A):pass
+NameError: name 'A' is not defined
+
+
+1)	class A(B):
+2)	pass
+3)	class B(A):
+4)	pass
+5)	NameError: name 'B' is not defined
+
+
+super() Method:
+----------------------
+super() is a built-in method which is useful to call the super class constructors,variables and methods from the child class.
+
+Demo Program-1 for super():
+----------------------------------------
+
+1)	class Person:
+2)	def init (self,name,age):
+3)	self.name=name
+4)	self.age=age 5)
+5)	def display(self):
+6)	print('Name:',self.name)
+7)	print('Age:',self.age)
+8)	class Student(Person):
+9)	def  init (self,name,age,rollno,marks):
+10)	super().  init (name,age)
+11)	self.rollno=rollno
+12)	self.marks=marks
+13)	def display(self):
+14)	super().display() 17)
+15)	print('Roll No:',self.rollno)
+16)	print('Marks:',self.marks) 17) s1=Student('Mahesh',22,101,90)
+18) s1.display()
+
+Output:
+Name: Mahesh Age: 22
+Roll No: 101
+Marks: 90
+
+-->In the above program we are using super() method to call parent class constructor and display() method.
+
+Demo Program-2 for super():
+----------------------------------------
+
+1) class P:
+2)	a=10
+3)	def init (self):
+4)	self.b=10
+5)	def m1(self):
+6)	print('Parent instance method')
+7)	@classmethod
+8)	def m2(cls):
+9)	print('Parent class method')
+10)	@staticmethod
+11)	def m3():
+12)	print('Parent static method') 13)
+14) class C(P):
+15)	a=888
+16)	def init (self):
+17)	self.b=999
+18)	super(). init ()
+19)	print(super().a)
+20)	super().m1()
+21)	super().m2()
+22)	super().m3()
+23) c=C()
+
+Output:
+----------- 10
+Parent instance method Parent class method Parent static method
+-->In the above example we are using super() to call various members of Parent class. How to call method of a particular Super class:
+------------------------------------------------------------------
+-->We can use the following approaches
+
+1).super(D,self).m1():
+-----------------------------
+It will call m1() method of super class of D.
+
+2.	A.m1(self):
+------------------
+It will call A class m1() method.
+
+1)	class A:
+2)	def m1(self):
+3)	print('A class Method')
+4)	class B(A):
+
+5)	def m1(self):
+6)	print('B class Method')
+7)	class C(B):
+8)	def m1(self):
+9)	print('C class Method')
+10)	class D(C): 1
+11)	def m1(self):
+12)	print('D class Method')
+13)	class E(D):
+14)	def m1(self):
+15)	A.m1(self)
+16) e=E() 17) e.m1()
+
+Output:
+------------
+A class Method
+
+Various Important Points about super():
+--------------------------------------------------------
+Case-1:
+----------
+From child class we are not allowed to access parent class instance variables by using super(),Compulsory we should use self only. But we can access parent class static variables by using super().
+
+Ex:
+-----	
+1) class P:
+2)	a=10
+3)	def init (self):
+4)
+5) class 
+6)	self.b=20
+C(P):
+def m1(self):
+7)	print(super().a)#valid
+8)	print(self.b)#valid
+9)	print(super().b)#invalid
+10) c=C()
+11) c.m1()
+Output:
+---------- 10
+20
+AttributeError: 'super' object has no attribute 'b'
+
+Case-2:
+-----------
+From child class constructor and instance method, we can access parent class instance method,static method and class method by using super().
+
+1)	class P:
+2)	def init (self):
+3)	print('Parent Constructor')
+4)	def m1(self): 5)
+5)	print('Parent instance method')
+6)	@classmethod
+7)	def m2(cls):
+8)	print('Parent class method')
+9)	@staticmethod
+10)	def m3():
+11)	print('Parent static method')
+12)	class C(P):
+13)	def init (self):
+14)	super(). init ()
+15)	super().m1()
+16)	super().m2()
+17)	super().m3()
+18)	def m1(self):
+19)	super(). init ()
+20)	super().m1()
+21)	super().m2()
+22)	super().m3()
+23) c=C() 24) c.m1()
+
+Output:
+-----------
+Parent Constructor Parent instance method Parent class method Parent static method Parent Constructor Parent instance method
+Parent class method Parent static method
+
+Case-3:
+-----------
+From child class, class method we cannot access parent class instance methods and constructors by using super() directly(but indirectly possible). But we can access parent class static and class methods.
+
+1)	class P:
+2)	def init (self):
+3)	print('Parent Constructor')
+4)	def m1(self):
+5)	print('Parent instance method')
+6)	@classmethod
+7)	def m2(cls):
+8)	print('Parent class method')
+9)	@staticmethod
+10)	def m3():
+11)	print('Parent static method')
+12)	class C(P):
+13)	@classmethod
+14)	def m1(cls):
+15)	#super(). init ()--->invalid
+16)	#super().m1()--->invalid
+17)	super().m2()
+18)	super().m3() 19) C.m1()
+
+Output:
+-----------
+Parent class method Parent static method
+
+From Class Method of Child class,how to call parent class instance methods and constructors:
+----------------------------------------------------------------------------------------------------------------
+
+1)	class A:
+2)	def init (self):
+3)	print('Parent constructor')
+4)	def m1(self):
+5)	print('Parent instance method')
+6)	class B(A):
+7)	@classmethod
+8)	def m2(cls):
+9)	super(B,cls). init (cls)
+10)	super(B,cls).m1(cls) 11) B.m2()
+
+Output:
+----------
+Parent constructor Parent instance method
+
+Case-4:
+-----------
+In child class static method we are not allowed to use super() generally (But in special way we can use).
+
+1)	class P:
+2)	def init (self):
+3)	print('Parent Constructor')
+4)	def m1(self):
+5)	print('Parent instance method')
+6)	@classmethod
+7)	def m2(cls):
+8)	print('Parent class method')
+9)	@staticmethod
+10)	def m3():
+11)	print('Parent static method') 12)
+13)	class C(P):
+14)	@staticmethod
+15)	def m1():
+16)	super().m1()-->invalid
+17)	super().m2()--->invalid
+18)	super().m3()--->invalid 19) C.m1()
+
+RuntimeError: super(): no arguments
+How to call parent class static method from child class static method by using super():
+---------------------------------------------------------------------------------------------------------------------
+
+1)	class A:
+2)	@staticmethod
+3)	def m1():
+4)	print('Parent static method')
+5)	class B(A):
+6)	@staticmethod
+7)	def m2():
+8)	super(B,B).m1() 
+9) B.m2()
+
+Output:
+-----------
+Parent static method
+
+ 
+
+
+
+
+
+
